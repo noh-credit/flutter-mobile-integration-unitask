@@ -1,4 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 중요함/ 시험에나옴 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:label="unitask"
         android:name="${applicationName}"
