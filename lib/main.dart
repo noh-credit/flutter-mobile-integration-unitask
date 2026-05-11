@@ -17,6 +17,7 @@ class UniTaskApp extends StatelessWidget {
       theme: AppTheme.light,
       darkTheme: AppTheme.dark,
       routerConfig: appRouter,
+      debugShowCheckedModeBanner: false, //위쪽 DEBUG띠를 나타내거나 false로 없앨 수 있음
     );
   }
 }

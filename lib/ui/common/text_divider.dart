@@ -16,9 +16,9 @@ class TextDivider extends StatelessWidget {
       children: [
         Expanded(child: Divider()),
         Text(
-         '또는',
-         style: TextStyle(
-          color: Colors.grey,
+          '또는',
+          style: TextStyle(
+            color: Colors.grey,
           )
         ),
         Expanded(child: Divider()),

@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:unitask/app/extensions/sized_box_extension.dart';
+import 'package:unitask/app/extensions/snackbar_extension.dart';
+import 'package:unitask/app/router/app_page.dart';
+import 'package:unitask/services/api_service.dart';
 import 'package:unitask/ui/common/label_text_field.dart';
 import 'package:unitask/ui/common/text_divider.dart';
 
@@ -12,12 +16,49 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final TextEditingController _emailController = .new();
+  final TextEditingController _pwController = TextEditingController();
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _pwController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _onLogin() async {
+    final email = _emailController.text.trim();
+    final password = _pwController.text.trim();
+
+    if (email.isEmpty || password.isEmpty) {
+      return context.showSnackbar('이메일 또는 비밀번호를 입력해주세요.', isError: true);
+    }
+
+    final response = await ApiService.login(email: email, password: password);
+
+    if (response == null) {
+      if (mounted) {
+        context.showSnackbar(
+          '로그인 실패',
+          isError: true,
+        );
+      }
+      return;
+    }
+
+    // TODO: 로그인 성공 -> 메인화면 이동
+    if(mounted) {
+      context.goNamed(AppPage.home.name);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: .all(20),
+        padding: const EdgeInsets.all(20),
         child: Center(
+          child: SingleChildScrollView(
             child: Column(
               mainAxisSize: .min,
               children: [
@@ -25,11 +66,11 @@ class _LoginPageState extends State<LoginPage> {
                   LucideIcons.graduationCap,
                   size: 50,
                 ),
-
+            
                 Text(
                   'UniTask',
                   style: TextStyle(
-                    fontSize: 28,
+                    fontSize: 24,
                     fontWeight: .bold,
                   ),
                 ),
@@ -41,35 +82,38 @@ class _LoginPageState extends State<LoginPage> {
                     color: Colors.grey
                   ),
                 ),
-
+            
                 50.heightbox,
-
+            
                 LabelTextField(
                   label: '이메일',
-                  hintText: 'example@uni',
+                  hintText: 'example@university.edu',
                   icon: LucideIcons.mail,
                 ),
-
+            
                 20.heightbox,
-
+            
                 LabelTextField(
                   label: '비밀번호',
                   hintText: '000000',
                   icon: LucideIcons.lockKeyhole,
+                  enableObscure: true,
                 ),
-
+            
                 Align(
                   alignment: Alignment.centerRight,
                   child: TextButton(
-                    onPressed: (){},
+                    onPressed: (){
+                      context.showSnackbar('곧 기능을 출시합니다!');
+                    },
                     child: const Text(
                       '비밀번호를 잊으셨나요?',
                     ),
                   ),
                 ),
-
+            
                 20.heightbox,
-
+            
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
@@ -83,24 +127,32 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-
+            
                 20.heightbox,
-
+            
                 const TextDivider(text: '또는'),
-
+            
                 20.heightbox,
-
+            
                 Row(
                   mainAxisSize: .min,
                   children: [
-                    const Text('계정이 없으신가요?'),
+                    Text(
+                      '계정이 없으신가요?',
+                      style: TextStyle(
+                        color: Colors.grey
+                      ),
+                    ),
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        context.pushNamed(AppPage.signup.name);
+                      },
                       child: Text('회원가입'),
                     ),
                   ],
                 ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
