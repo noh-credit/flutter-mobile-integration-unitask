@@ -1,23 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import 'package:unitask/app/extensions/sized_box_extension.dart';
-import 'package:unitask/app/extensions/snackbar_extension.dart';
 import 'package:unitask/app/router/app_page.dart';
-import 'package:unitask/services/api_service.dart';
+import 'package:unitask/core/extensions/build_context_extension.dart';
+import 'package:unitask/core/extensions/sized_box_extension.dart';
+import 'package:unitask/core/models/result.dart';
+import 'package:unitask/features/auth/auth_provider.dart';
 import 'package:unitask/ui/common/label_text_field.dart';
 import 'package:unitask/ui/common/text_divider.dart';
 
-class LoginPage extends StatefulWidget {
+class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  ConsumerState<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends ConsumerState<LoginPage> {
   final TextEditingController _emailController = .new();
-  final TextEditingController _pwController = TextEditingController();
+  final _pwController = TextEditingController();
+  // 위에 두 방법 모두 동일한 동작을 함
 
   @override
   void dispose() {
@@ -34,31 +37,29 @@ class _LoginPageState extends State<LoginPage> {
       return context.showSnackbar('이메일 또는 비밀번호를 입력해주세요.', isError: true);
     }
 
-    final response = await ApiService.login(email: email, password: password);
+    final result = await ref
+      .read(authProvider.notifier)
+      .login(email: email, password: password);
 
-    if (response == null) {
-      if (mounted) {
-        context.showSnackbar(
-          '로그인 실패',
-          isError: true,
-        );
-      }
-      return;
-    }
-
-    // TODO: 로그인 성공 -> 메인화면 이동
-    if(mounted) {
-      context.goNamed(AppPage.home.name);
+    // 메인 화면 이동
+    switch (result) {
+      case Success():
+        if (mounted) context.goNamed(AppPage.home.name);
+      case Failure(:final exception):
+        if (mounted) {
+          context.showSnackbar(exception.toString(), isError: true);
+        }
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final loading = ref.watch(authProvider).isLoading;
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: .all(20),
         child: Center(
-          child: SingleChildScrollView(
+          child: SingleChildScrollView( // 키보드 표시시 공간부족으로 인한 에러 방지
             child: Column(
               mainAxisSize: .min,
               children: [
@@ -86,6 +87,7 @@ class _LoginPageState extends State<LoginPage> {
                 50.heightbox,
             
                 LabelTextField(
+                  controller: _emailController,
                   label: '이메일',
                   hintText: 'example@university.edu',
                   icon: LucideIcons.mail,
@@ -94,6 +96,7 @@ class _LoginPageState extends State<LoginPage> {
                 20.heightbox,
             
                 LabelTextField(
+                  controller: _pwController,
                   label: '비밀번호',
                   hintText: '000000',
                   icon: LucideIcons.lockKeyhole,
@@ -115,15 +118,20 @@ class _LoginPageState extends State<LoginPage> {
                 20.heightbox,
             
                 SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    child: const Text(
+                  width: .infinity,
+                  child: ElevatedButton.icon(
+                    onPressed: loading ? null : _onLogin,
+                    icon: loading
+                      ? SizedBox.square(
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 2,
+                          ),
+                        )
+                      : null,
+                    label: Text(
                       '로그인',
-                      style: TextStyle(
-                        fontWeight: .bold,
-                        fontSize: 18,
-                      ),
+                      style: TextStyle(fontWeight: .bold, fontSize: 20),
                     ),
                   ),
                 ),
