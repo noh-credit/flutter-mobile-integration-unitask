@@ -4,7 +4,7 @@ import 'dart:convert';
 class AuthData {
   final String name;
   final String tokenType;
-  final String AccessToken;
+  final String accessToken;
   final String refreshToken;
   final int expiresAt;
   final int expiresIn;
@@ -12,7 +12,7 @@ class AuthData {
   AuthData({
     required this.name,
     required this.tokenType,
-    required this.AccessToken,
+    required this.accessToken,
     required this.refreshToken,
     required this.expiresAt,
     required this.expiresIn,
@@ -21,7 +21,7 @@ class AuthData {
   AuthData copyWith({
     String? name,
     String? tokenType,
-    String? AccessToken,
+    String? accessToken,
     String? refreshToken,
     int? expiresAt,
     int? expiresIn,
@@ -29,7 +29,7 @@ class AuthData {
     return AuthData(
       name: name ?? this.name,
       tokenType: tokenType ?? this.tokenType,
-      AccessToken: AccessToken ?? this.AccessToken,
+      accessToken: accessToken ?? this.accessToken,
       refreshToken: refreshToken ?? this.refreshToken,
       expiresAt: expiresAt ?? this.expiresAt,
       expiresIn: expiresIn ?? this.expiresIn,
@@ -40,7 +40,7 @@ class AuthData {
     return <String, dynamic>{
       'name': name,
       'token_type': tokenType,
-      'access_token': AccessToken,
+      'access_token': accessToken,
       'refresh_token': refreshToken,
       'expires_at': expiresAt,
       'expires_in': expiresIn,
@@ -51,7 +51,7 @@ class AuthData {
     return AuthData(
       name: map['name'] as String,
       tokenType: map['token_type'] as String,
-      AccessToken: map['access_token'] as String,
+      accessToken: map['access_token'] as String,
       refreshToken: map['refresh_token'] as String,
       expiresAt: map['expires_at'] as int,
       expiresIn: map['expires_in'] as int,
@@ -64,7 +64,7 @@ class AuthData {
 
   @override
   String toString() {
-    return 'AuthData(name: $name, tokenType: $tokenType, AccessToken: $AccessToken, refreshToken: $refreshToken, expiresAt: $expiresAt, expiresIn: $expiresIn)';
+    return 'AuthData(name: $name, tokenType: $tokenType, AccessToken: $accessToken, refreshToken: $refreshToken, expiresAt: $expiresAt, expiresIn: $expiresIn)';
   }
 
   @override
@@ -74,7 +74,7 @@ class AuthData {
     return 
       other.name == name &&
       other.tokenType == tokenType &&
-      other.AccessToken == AccessToken &&
+      other.accessToken == accessToken &&
       other.refreshToken == refreshToken &&
       other.expiresAt == expiresAt &&
       other.expiresIn == expiresIn;
@@ -84,7 +84,7 @@ class AuthData {
   int get hashCode {
     return name.hashCode ^
       tokenType.hashCode ^
-      AccessToken.hashCode ^
+      accessToken.hashCode ^
       refreshToken.hashCode ^
       expiresAt.hashCode ^
       expiresIn.hashCode;

@@ -9,14 +9,14 @@ import 'package:unitask/models/subject.dart';
 class SubjectApiService {
   final String _baseUrl = '${AppStrings.apiHostUrl}/subjects';
 
-  Map<String, dynamic> _headers(String accessToken) => {
+  //토큰 활용
+  Map<String, String> _headers(String accessToken) => {
     HttpHeaders.authorizationHeader: 'Bearer $accessToken',
     HttpHeaders.contentTypeHeader: 'application/json',
   };
 
   // GET /subjects => 목록 조회
   Future<Result<List<Subject>>> fetchAll(String accessToken) async {
-
     try {
       final response = await http.get(
         Uri.parse(_baseUrl),
@@ -28,15 +28,15 @@ class SubjectApiService {
       }
 
       final list = (json.decode(response.body) as List)
-        .map((e) => Subject.fromMap(e as Map<String, dynamic>))
-        .toList();
-
+          .map((e) => Subject.fromMap(e as Map<String, dynamic>))
+          .toList();
       return Success(list);
     } on Exception catch (e) {
       return Failure(e);
     }
   }
 
+  //POST /subjects => 과목 추가
   Future<Result<Subject>> create({
     required String accessToken,
     required String name,
@@ -52,7 +52,7 @@ class SubjectApiService {
         }),
       );
 
-      if(response.statusCode != 200) {
+      if (response.statusCode != 200) {
         throw Exception('과목 생성을 실패했습니다.');
       }
 

@@ -1,3 +1,4 @@
+//priority.dart 의 extenstion과 동일한 기능
 enum AssignmentStatus {
   inProgress,
   completed;
@@ -10,5 +11,5 @@ enum AssignmentStatus {
   bool get isCompleted => this == .completed;
 
   static AssignmentStatus fromApi(String value) =>
-    value == 'completed' ? .completed : .inProgress;
+      value == 'completed' ? .completed : .inProgress;
 }

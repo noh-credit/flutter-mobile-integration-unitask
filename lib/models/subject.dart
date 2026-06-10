@@ -1,12 +1,12 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 class Subject {
   final String id;
   final String name;
-  final String color;
+  final String color; //Hex(#00000)
   final DateTime? createdAt;
   final DateTime? updatedAt;
+
   Subject({
     required this.id,
     required this.name,
@@ -43,17 +43,22 @@ class Subject {
 
   factory Subject.fromMap(Map<String, dynamic> map) {
     return Subject(
-      id: map['id'] as '',
-      name: map['name'] as '',
-      color: map['color'] as '',
-      createdAt: map['createdAt'] != null ? DateTime.parse(map['created_At'] as int) : null,
-      updatedAt: map['updatedAt'] != null ? DateTime.parse(map['updated_At'] as int) : null,
+      id: map['id'] as String,
+      name: map['name'] as String,
+      color: map['color'] as String,
+      createdAt: map['created_at'] != null
+          ? DateTime.parse(map['createdAt'])
+          : null,
+      updatedAt: map['updated_at'] != null
+          ? DateTime.parse(map['updatedAt'])
+          : null,
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory Subject.fromJson(String source) => Subject.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory Subject.fromJson(String source) =>
+      Subject.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {
@@ -63,21 +68,20 @@ class Subject {
   @override
   bool operator ==(covariant Subject other) {
     if (identical(this, other)) return true;
-  
-    return 
-      other.id == id &&
-      other.name == name &&
-      other.color == color &&
-      other.createdAt == createdAt &&
-      other.updatedAt == updatedAt;
+
+    return other.id == id &&
+        other.name == name &&
+        other.color == color &&
+        other.createdAt == createdAt &&
+        other.updatedAt == updatedAt;
   }
 
   @override
   int get hashCode {
     return id.hashCode ^
-      name.hashCode ^
-      color.hashCode ^
-      createdAt.hashCode ^
-      updatedAt.hashCode;
+        name.hashCode ^
+        color.hashCode ^
+        createdAt.hashCode ^
+        updatedAt.hashCode;
   }
 }

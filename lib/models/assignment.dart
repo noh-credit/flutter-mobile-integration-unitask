@@ -1,8 +1,7 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-import 'package:flutter/scheduler.dart';
 import 'package:unitask/core/enum/assignment_status.dart';
+import 'package:unitask/core/enum/priority.dart';
 import 'package:unitask/models/subject.dart';
 
 class Assignment {
@@ -13,11 +12,12 @@ class Assignment {
   final DateTime dueDate;
   final Priority priority;
   final AssignmentStatus status;
-  final DateTime? completedAt;
+  final DateTime? completeAt;
   final DateTime? createdAt;
   final DateTime? updatedAt;
-
+  //과목
   final Subject? subject;
+
   Assignment({
     required this.id,
     required this.subjectId,
@@ -26,7 +26,7 @@ class Assignment {
     required this.dueDate,
     required this.priority,
     required this.status,
-    this.completedAt,
+    this.completeAt,
     this.createdAt,
     this.updatedAt,
     this.subject,
@@ -40,7 +40,7 @@ class Assignment {
     DateTime? dueDate,
     Priority? priority,
     AssignmentStatus? status,
-    DateTime? completedAt,
+    DateTime? completeAt,
     DateTime? createdAt,
     DateTime? updatedAt,
     Subject? subject,
@@ -53,7 +53,7 @@ class Assignment {
       dueDate: dueDate ?? this.dueDate,
       priority: priority ?? this.priority,
       status: status ?? this.status,
-      completedAt: completedAt ?? this.completedAt,
+      completeAt: completeAt ?? this.completeAt,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
       subject: subject ?? this.subject,
@@ -69,7 +69,7 @@ class Assignment {
       'dueDate': dueDate.millisecondsSinceEpoch,
       'priority': priority.name,
       'status': status.name,
-      'completedAt': completedAt?.millisecondsSinceEpoch,
+      'completeAt': completeAt?.millisecondsSinceEpoch,
       'createdAt': createdAt?.millisecondsSinceEpoch,
       'updatedAt': updatedAt?.millisecondsSinceEpoch,
       'subject': subject?.toMap(),
@@ -78,59 +78,67 @@ class Assignment {
 
   factory Assignment.fromMap(Map<String, dynamic> map) {
     return Assignment(
-      id: map['id'] as String,
-      subjectId: map['subjectId'] as String,
-      title: map['title'] as String,
-      description: map['description'] != null ? map['description'] as String : null,
-      dueDate: DateTime.fromMillisecondsSinceEpoch(map['dueDate'] as int),
+      id: map['id'] ?? '',
+      subjectId: map['subject_id'] ?? '',
+      title: map['title'] ?? '',
+      description: map['description'],
+      dueDate: DateTime.parse(map['dueDate']),
       priority: Priority.values.firstWhere(map['priority']),
       status: AssignmentStatus.fromApi(map['status']),
-      completedAt: map['completedAt'] != null ? DateTime.parse(map['completedAt'] as int) : null,
-      createdAt: map['createdAt'] != null ? DateTime.parse(map['createdAt'] as int) : null,
-      updatedAt: map['updatedAt'] != null ? DateTime.parse(map['updatedAt'] as int) : null,
-      subject: map['subject'] != null ? Subject.fromMap(map['subject']) : null,
+      completeAt: map['complete_at'] != null
+          ? DateTime.parse(map['completeAt'])
+          : null,
+      createdAt: map['created_at'] != null
+          ? DateTime.parse(map['createdAt'])
+          : null,
+      updatedAt: map['updated_at'] != null
+          ? DateTime.parse(map['updatedAt'])
+          : null,
+      subject: map['subject'] != null
+          ? Subject.fromMap(map['subject'] as Map<String, dynamic>)
+          : null,
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory Assignment.fromJson(String source) => Assignment.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory Assignment.fromJson(String source) =>
+      Assignment.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {
-    return 'Assignment(id: $id, subjectId: $subjectId, title: $title, description: $description, dueDate: $dueDate, priority: $priority, status: $status, completedAt: $completedAt, createdAt: $createdAt, updatedAt: $updatedAt, subject: $subject)';
+    return 'Assignment(id: $id, subjectId: $subjectId, title: $title, description: $description, dueDate: $dueDate, priority: $priority, status: $status, completeAt: $completeAt, createdAt: $createdAt, updatedAt: $updatedAt, subject: $subject)';
   }
 
   @override
   bool operator ==(covariant Assignment other) {
     if (identical(this, other)) return true;
-  
-    return 
-      other.id == id &&
-      other.subjectId == subjectId &&
-      other.title == title &&
-      other.description == description &&
-      other.dueDate == dueDate &&
-      other.priority == priority &&
-      other.status == status &&
-      other.completedAt == completedAt &&
-      other.createdAt == createdAt &&
-      other.updatedAt == updatedAt &&
-      other.subject == subject;
+
+    return other.id == id &&
+        other.subjectId == subjectId &&
+        other.title == title &&
+        other.description == description &&
+        other.dueDate == dueDate &&
+        other.priority == priority &&
+        other.status == status &&
+        other.completeAt == completeAt &&
+        other.createdAt == createdAt &&
+        other.updatedAt == updatedAt &&
+        other.subject == subject;
   }
 
   @override
   int get hashCode {
     return id.hashCode ^
-      subjectId.hashCode ^
-      title.hashCode ^
-      description.hashCode ^
-      dueDate.hashCode ^
-      priority.hashCode ^
-      status.hashCode ^
-      completedAt.hashCode ^
-      createdAt.hashCode ^
-      updatedAt.hashCode ^
-      subject.hashCode;
+        subjectId.hashCode ^
+        title.hashCode ^
+        description.hashCode ^
+        dueDate.hashCode ^
+        priority.hashCode ^
+        status.hashCode ^
+        completeAt.hashCode ^
+        createdAt.hashCode ^
+        updatedAt.hashCode ^
+        subject.hashCode;
   }
 }
