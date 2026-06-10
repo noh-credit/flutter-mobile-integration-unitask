@@ -11,8 +11,6 @@ Widget chipPreview() => Wrap(
 );
 
 ///앱 테마
-///-LIGHT
-///-DARK
 class AppTheme {
   static ThemeData get light => ThemeData.light(useMaterial3: true).copyWith(
     scaffoldBackgroundColor: Colors.white,
@@ -52,10 +50,11 @@ class AppTheme {
         borderSide: BorderSide.none,
       ),
     ),
+    cardTheme: CardThemeData(elevation: 4, color: Colors.white),
   );
 
   static ThemeData get dark => ThemeData.dark(useMaterial3: true).copyWith(
-    scaffoldBackgroundColor: Color(0xFF0F172A), // 거의 블랙 + 살짝 블루톤
+    scaffoldBackgroundColor: Color(0xFF0F172A),
     appBarTheme: AppBarTheme(
       backgroundColor: Color(0xFF0F172A),
       foregroundColor: Colors.white,
@@ -74,7 +73,7 @@ class AppTheme {
 
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
-        foregroundColor: Color(0xFF60A5FA), // 다크에서 조금 밝은 블루
+        foregroundColor: Color(0xFF60A5FA),
       ),
     ),
 
@@ -89,7 +88,7 @@ class AppTheme {
 
     inputDecorationTheme: InputDecorationThemeData(
       filled: true,
-      fillColor: Color(0xFF1E293B), // 입력창은 살짝 밝은 블랙
+      fillColor: Color(0xFF1E293B),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
         borderSide: BorderSide.none,
